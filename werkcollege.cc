@@ -54,21 +54,6 @@ public:
 		}
 	}//leeg
 
-	void leegPlek(int n, int m) {
-		nono[n][m] = 0;
-	}//leegPlek
-
-	void vulPlek(int n, int m) {
-		nono[n][m] = 1;
-	}//vulPlek
-
-	void test() {
-		cout << hoi;
-	}
-
-	void verandertest() {
-		hoi = 10;
-	}
 	//berekent de horizontale beschrijving
 	void NieuweBeschrijvingHor() {
 		//variabelen voor loop en tellen
@@ -98,6 +83,68 @@ public:
 				horBeschrijving[i][n - 1] = count;
 				count = 0;
 			}
+		}
+	}
+
+	void testBeschrijvingHor(){
+		//variabelen voor loop en tellen
+		int i, n, count = 0;
+		for (i = 0; i < max; i++) {
+			for (n = 0; n < max; n++) {
+				//zwart vlak
+				if (nono[i][n] == 1) {
+					count++;
+					hortest[i][n] = 0;
+				}
+				//geen zwart vlak
+				else {
+					//ervoor wel zwart
+					if (count > 0) {
+						hortest[i][n] = count;
+						count = 0;
+					}
+					else { //ervoor niet zwart
+						hortest[i][n] = 0;
+					}
+				}
+
+			}
+			//laatste in de rij zwart
+			if (count > 0) {
+				hortest
+[i][n - 1] = count;
+				count = 0;
+			}
+		}
+	}
+
+	void testBeschrijvingVer() {
+		int i, n, count = 0;
+		for (i = 0; i < max; i++) {
+			for (n = 0; n < max; n++) {
+				//zwart
+				if (nono[n][i] == 1) {
+					count++;
+					vertest[n][i] = 0;
+				}
+				//niet zwart
+				else {//vorige zwart
+					if (count > 0) {
+						vertest[n][i] = count;
+						count = 0;
+					}
+					else { //vorige niet zwart
+						vertest[n][i] = 0;
+					}
+				}
+
+			}
+			//laatste in rij zwart
+			if (count > 0) {
+				vertest[n - 1][i] = count;
+				count = 0;
+			}
+
 		}
 	}
 
@@ -131,24 +178,31 @@ public:
 
 		}
 	}
+
 	//zodat er geen lege ruimtes onder staan
 	void aanpassenVer() {
 		int i, n, k;
+		for (i = 0; i < max; i++) {
+			for (n = 0; n < max; n++) {
+				verOptimaal[i][n] = verBeschrijving[i][n];
+			}
+		}
+		
 		vercount = 0; //juiste aantal regels bij printen
 		for (k = 0; k < max; k++) { //moet een paar keer gedaan worden
 			for (i = 0; i < max; i++) {
 				for (n = 0; n < max - 1; n++) {
 					//als een locatie 0 is en het getal eronder geen nul
 					//schuif dan het getal eronder naar boven
-					if (verBeschrijving[n][i] == 0) {
-						if (verBeschrijving[n + 1][i] != 0) {
-							verBeschrijving[n][i] = verBeschrijving[n + 1][i];
-							verBeschrijving[n + 1][i] = 0;
+					if (verOptimaal[n][i] == 0) {
+						if (verOptimaal[n + 1][i] != 0) {
+							verOptimaal[n][i] = verOptimaal[n + 1][i];
+							verOptimaal[n + 1][i] = 0;
 						}
 					}
 					//in de laatste loop kijken hoe veel rijen
 					if (k == (max - 1)) {
-						if (verBeschrijving[n][i] != 0) {
+						if (verOptimaal[n][i] != 0) {
 							if (n > vercount) {
 								vercount = n;
 							}
@@ -158,6 +212,7 @@ public:
 			}
 		}
 	}
+
 	//nieuwe beschrijving laten genereren
 	void nieuweBeschrijving() {
 		NieuweBeschrijvingHor();
@@ -182,6 +237,10 @@ public:
 
 	//drukt de nonogram af
 	void drukAf() {
+		bool goedhor = true;
+		bool goedver = true;
+		testBeschrijvingHor();
+		testBeschrijvingVer();
 		//variabelen voor de loop
 		int i, n, k, m, horprintn, verprinti, verprintn;
 		for (m = 0; m < max + 1; m++) {
@@ -198,25 +257,51 @@ public:
 			}
 			cout << " + "; //rand rechts
 			//horizontale beschrijving elke rij
+			goedhor = true;
 			for (horprintn = 0; horprintn < max; horprintn++) {
 				//als er een 0 staat niet printen
 				if (horBeschrijving[i][horprintn] != 0) {
 					cout << horBeschrijving[i][horprintn] << " ";
+					if (horBeschrijving[i][horprintn] != hortest[i][horprintn]) {
+						goedhor = false;
+					}
 				}
 			}
-			cout << endl;
+			if (goedhor) {
+				cout << "V" << endl;
+			}
+			else {
+				cout << endl;
+			}
 		}
 		for (k = 0; k < max + 1; k++) {
 			cout << "+++"; //onderrand
 		}
 		cout << "+" << endl;
 		//verticale beschrijving
-		for (verprintn = 0; verprintn < vercount; verprintn++) {
+		cout << "  ";
+		for (verprintn = 0; verprintn < max; verprintn++) {
+			goedver = true;
+			for (verprinti = 0; verprinti < max; verprinti++) {
+				if (verBeschrijving[verprinti][verprintn] != vertest[verprinti][verprintn]) {
+					goedhor = false;
+				}
+			}
+			if (goedver) {
+				cout << " V ";
+			}
+			else {
+				cout << "   ";
+			}
+		}
+		cout << endl;
+
+		for (verprintn = 0; verprintn < vercount +1; verprintn++) {
 			cout << "  ";
 			for (verprinti = 0; verprinti < max; verprinti++) {
-
-				if (verBeschrijving[verprintn][verprinti] != 0) {
-					cout << " " << verBeschrijving[verprintn][verprinti] << " ";
+				
+				if (verOptimaal[verprintn][verprinti] != 0) {
+					cout << " " << verOptimaal[verprintn][verprinti] << " ";
 				}
 				else {
 					cout << "   ";
@@ -226,6 +311,126 @@ public:
 		}
 	}//drukAf
 
+	void cursorControl() {
+		int i, n;
+		bool again = true;
+		while (again)
+		{
+			cout << "[w]boven, [s]beneden, [a]links, [d]rechts, [t]oggle, [q]hoofdmenu" << endl;
+			char beweeg = cin.get();
+			if (beweeg) {
+				switch (beweeg) {
+				case 'w': { 
+					if (cursory > 0) {
+						cursory = cursory - 1;
+					} break; }
+				case 's': { 
+					if (cursory < max - 1) {
+						cursory = cursory + 1;
+					} break; }
+				case 'a': { 
+					if (cursorx > 0) {
+						cursorx = cursorx - 1;
+					} break; }
+				case 'd': { 
+					if (cursorx < max - 1) {
+						cursorx = cursorx + 1;
+					} break; }
+				case 't': {
+					if (nono[cursory][cursorx] == 0) {
+						nono[cursory][cursorx] = 1;
+					}
+					else {
+						nono[cursory][cursorx] = 0;
+					}break; }
+				case 'q': { again = false; }
+				}
+			}
+			cursorPrint();
+		}
+		
+	}
+
+	//drukAf met cursor
+	void cursorPrint() {
+		bool goedhor = true;
+		bool goedver = true;
+		testBeschrijvingHor();
+		testBeschrijvingVer();
+		int i, n, k, m, horprintn, verprinti, verprintn;
+		for (m = 0; m < max + 1; m++) {
+			cout << "+++";
+		}
+		cout << "+" << endl;
+		for (i = 0; i < max; i++) {
+			cout << "+ ";
+			for (n = 0; n < max; n++) {
+				if (nono[i][n] == 1) {
+					if (i == cursory && n == cursorx)
+						cout << " * ";
+					else
+						cout << " X ";
+				}
+				else {
+					if (i == cursory && n == cursorx)
+						cout << " - ";
+					else
+						cout << "   ";
+				}
+			}
+			cout << " + ";
+			goedhor = true;
+			for (horprintn = 0; horprintn < max; horprintn++) {
+				if (horBeschrijving[i][horprintn] != 0) {
+					cout << horBeschrijving[i][horprintn] << " ";
+					if (horBeschrijving[i][horprintn] != hortest[i][horprintn]) {
+						goedhor = false;
+					}
+				}
+			}
+			if (goedhor) {
+				cout << "V" << endl;
+			}
+			else {
+				cout << endl;
+			}
+		}
+		for (k = 0; k < max + 1; k++) {
+			cout << "+++";
+		}
+		cout << "+" << endl;
+		//verticale beschrijving
+		cout << "  ";
+		for (verprintn = 0; verprintn < max; verprintn++) {
+			goedver = true;
+			for (verprinti = 0; verprinti < max; verprinti++) {
+				if (verBeschrijving[verprinti][verprintn] != vertest[verprinti][verprintn]) {
+					goedver = false;
+				}
+			}
+			if (goedver) {
+				cout << " V ";
+			}
+			else {
+				cout << "   ";
+			}
+		}
+		cout << endl;
+		for (verprintn = 0; verprintn < vercount + 1; verprintn++) {
+			cout << "  ";
+			for (verprinti = 0; verprinti < max; verprinti++) {
+
+				if (verOptimaal[verprintn][verprinti] != 0) {
+					cout << " " << verOptimaal[verprintn][verprinti] << " ";
+				}
+				else {
+					cout << "   ";
+				}
+			}
+			cout << endl;
+		}
+	}//drukAf
+	
 	//coordinaten van de cursor aan het begin
 	int cursorx = (max / 2) + 1, cursory = (max / 2) + 1;
 	//het randompercentage
@@ -234,8 +439,11 @@ public:
 	static const int max = 10;
 	//de horizontale beschrijving
 	int horBeschrijving[max][max];
+	int hortest[max][max];
 	//de verticale beschrijving
+	int verOptimaal[max][max];
 	int verBeschrijving[max][max];
+	int vertest[max][max];
 	int vercount;
 	//het nonogram zelf
 	bool nono[max][max];
@@ -243,30 +451,6 @@ public:
 
 
 };
-
-int cursor() //laat de cursor bewegen
-{
-	cout << "Dit laat de cursor bewegen" << endl;
-	return 0;
-}//cursor
-
-int random() //vult het huidige beeld random in mbv gegeven percentage
-{
-	cout << "Dit maakt het huidige beeld random met het gegeven percentage" << endl;
-	return 0;
-}//random
-
-int toggle() //klapt het huidige pixel om 0>1 en 1>0
-{
-	cout << "Dit klapt het huidige pixel om" << endl;
-	return 0;
-}//toggle
-
-int nul() //maakt alle beschrijvingen 0
-{
-	cout << "Dit maakt alle beschrijvingen 0" << endl;
-	return 0;
-}//nul
 
 int inlezen() //leest beschrijving in uit een file
 {
@@ -280,26 +464,6 @@ int wegschrijven() //schrijft huidige beschrijving weg naar een file
 	return 0;
 }//wegschrijven
 
-
-	//submenu van wijzigen
-int grootte()
-{
-	cout << "Wijzigt de grootte van de puzzel" << endl;
-	return 0;
-}//grootte
-
-int cursorkleur()
-{
-	cout << "Wijzigt de kleur van het nieuwe punt bij het verplaatsen van de cursor" << endl;
-	return 0;
-}//cursorkleur
-
-int percentage()
-{
-	cout << "Wijzigt het random percentage" << endl;
-	return 0;
-}//percentage
-
 int wijzigen()
 {
 	bool again = true;
@@ -310,9 +474,9 @@ int wijzigen()
 		if (submenuinput) {
 
 			switch (submenuinput) {
-			case 'G': { grootte(); break; }
-			case 'C': { cursorkleur(); break; }
-			case 'P': { percentage(); break; }
+			//case 'G': { grootte(); break; }
+			//case 'C': { cursorkleur(); break; }
+			//case 'P': { percentage(); break; }
 			default: { return 0; }
 			}//switch
 		}//submenuinput
@@ -335,25 +499,22 @@ int hoofdmenu(nonogram &n)
 {
 	bool again = true;
 	while (again) {
-		cout << "S[C]hoon  C[U]rsor  [R]andom  [T]oggle  [N]ul  [I]nlezen  W[E]gschrijven  [W]ijzigen  [S]toppen [B]eschrijving [P]rinten" << endl;
+		cout << "s[c]hoon, c[u]rsor, [r]andom, [n]ul, [i]nlezen, w[e]gschrijven, [w]ijzigen, [q]stoppen, [b]eschrijving, [p]rinten" << endl;
 		char menuinput = cin.get();
 		switch (menuinput) {
-		case 'C': { n.leeg(); break; }
-		case 'U': { cursor(); break; }
-		case 'R': { n.vulRandom(); break; }
-		case 'T': { toggle(); break; }
-		case 'N': { n.beschrijvingReset(); break; }
-		case 'I': { inlezen(); break; }
-		case 'E': { wegschrijven(); break; }
-		case 'W': { wijzigen(); break; }
-		case 'B': { n.nieuweBeschrijving(); break; }
-		case 'P': {n.drukAf(); break; }
-		case 'S': {again = false; break; }
+		case 'c': { n.leeg(); break; }
+		case 'u': { n.cursorControl(); break; }
+		case 'r': { n.vulRandom(); break; }
+		case 'n': { n.beschrijvingReset(); break; }
+		case 'i': { inlezen(); break; }
+		case 'e': { wegschrijven(); break; }
+		case 'w': { wijzigen(); break; }
+		case 'b': { n.nieuweBeschrijving(); break; }
+		case 'p': { n.drukAf(); break; }
+		case 'q': {again = false; break; }
 		default: { break; }
 		}//switch
-		cout << "Druk op ENTER om terug te gaan naar het hoofdmenu";
 		cin.get(); //Als er op enter wordt gedrukt gaat hij terug naar het hoofdmenu
-		cin.get();
 	}
 
 	//int hoofdmenu();
