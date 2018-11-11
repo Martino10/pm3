@@ -84,10 +84,15 @@ public:
 			cout << "+++";
 		}
 		cout << "+" << endl;
-		for (verprinti = 0; verprinti < max; verprinti++) {
-			for (verprintn = 0; verprintn < max; verprintn++) {
+		for (verprintn = 0; verprintn < max; verprintn++) {
+			cout << "   ";
+			for (verprinti = 0; verprinti < max; verprinti++) {
+				
 				if (verBeschrijving[verprintn][verprinti] != 0) {
-					cout << verBeschrijving[verprintn][verprinti] << " ";
+					cout << " " << verBeschrijving[verprintn][verprinti] << " ";
+				}
+				else {
+					cout << "  ";
 				}
 			}
 			cout << endl;
