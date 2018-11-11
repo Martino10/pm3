@@ -50,21 +50,18 @@ int wegschrijven() //schrijft huidige beschrijving weg naar een file
 	int grootte()
 	{
 		cout << "Wijzigt de grootte van de puzzel" << endl;
-		cout << "Druk op ENTER om terug te gaan naar het hoofdmenu";
 		return 0;
 	}//grootte
 
 	int cursorkleur()
 	{
 		cout << "Wijzigt de kleur van het nieuwe punt bij het verplaatsen van de cursor" << endl;
-		cout << "Druk op ENTER om terug te gaan naar het hoofdmenu";
 		return 0;
 	}//cursorkleur
 
 	int percentage()
 	{
 		cout << "Wijzigt het random percentage" << endl;
-		cout << "Druk op ENTER om terug te gaan naar het hoofdmenu";
 		return 0;
 	}//percentage
 
@@ -82,6 +79,7 @@ int wijzigen()
 		default: { return 0; }
 		}//switch
 	}//submenuinput
+	cout << "Druk op ENTER om terug te gaan naar het hoofdmenu";
 	cin.get(); //Als er op enter wordt gedrukt gaat hij terug naar het hoofdmenu
 	cin.get();
 	int hoofdmenu();
