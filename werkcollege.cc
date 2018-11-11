@@ -44,6 +44,14 @@ public:
 		}
 	}//vulRandom
 
+	void wgrootte() {
+		
+	}
+	
+	void wpercentage() {
+		randperc = leesGetal();
+	}
+
 	//maakt de nonogram leeg
 	void leeg() {
 		int i, n;
@@ -464,20 +472,20 @@ int wegschrijven() //schrijft huidige beschrijving weg naar een file
 	return 0;
 }//wegschrijven
 
-int wijzigen()
+int wijzigen(nonogram &n)
 {
 	bool again = true;
 	while (again) {
-		cout << "[G]rootte   [C]ursorkleur  [P]ercentage" << endl;
+		cout << "[g]rootte, [p]ercentage, [q]terug" << endl;
 		cin.get();
 		char submenuinput = cin.get();
 		if (submenuinput) {
 
 			switch (submenuinput) {
-			//case 'G': { grootte(); break; }
-			//case 'C': { cursorkleur(); break; }
-			//case 'P': { percentage(); break; }
-			default: { return 0; }
+			case 'g': { n.wgrootte(); break; }
+			case 'p': { n.wpercentage(); break; }
+			case 'q': { return 0; break; }
+			default: { break; }
 			}//switch
 		}//submenuinput
 		cout << "Druk op ENTER om terug te gaan naar het hoofdmenu";
@@ -508,7 +516,7 @@ int hoofdmenu(nonogram &n)
 		case 'n': { n.beschrijvingReset(); break; }
 		case 'i': { inlezen(); break; }
 		case 'e': { wegschrijven(); break; }
-		case 'w': { wijzigen(); break; }
+		case 'w': { wijzigen(n); break; }
 		case 'b': { n.nieuweBeschrijving(); break; }
 		case 'p': { n.drukAf(); break; }
 		case 'q': {again = false; break; }
