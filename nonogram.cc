@@ -59,7 +59,7 @@ public:
 	}//vulPlek
 
 	void drukAf() {
-		int i, n, k, m;
+		int i, n, k, m, horprintn, verprinti, verprintn;
 		for (m = 0; m < max +1; m++) {
 			cout << "+++";
 		}
@@ -72,12 +72,26 @@ public:
 				else
 					cout << "   ";
 			}
-			cout << " +" << endl;
+			cout << " + ";
+			for (horprintn = 0; horprintn < max; horprintn++) {
+				if (horBeschrijving[i][horprintn] != 0) {
+					cout << horBeschrijving[i][horprintn] << " ";
+				}
+			}
+			 cout << endl;
 		}
 		for (k = 0; k < max +1; k++) {
 			cout << "+++";
 		}
 		cout << "+" << endl;
+		for (verprinti = 0; verprinti < max; verprinti++) {
+			for (verprintn = 0; verprintn < max; verprintn++) {
+				if (verBeschrijving[verprintn][verprinti] != 0) {
+					cout << verBeschrijving[verprintn][verprinti] << " ";
+				}
+			}
+			cout << endl;
+		}
 	}//drukAf
 
 	void NieuweBeschrijvingHor() {
@@ -158,7 +172,21 @@ public:
 			cout << endl;
 		}
 	}
+	
+	void printCursor() {
 
+	}
+	void beschrijvingReset() {
+		int i, n;
+		for (i = 0; i < max; i++) {
+			for (n = 0; n < max; n++) {
+				verBeschrijving[i][n] = 0;
+				horBeschrijving[i][n] = 0;
+			}
+		}
+	}
+
+	int cursorx = (max / 2) + 1, cursory = (max / 2) + 1;
 	int randperc = 50;
 	static const int max = 10;
 	int horBeschrijving[max][max];
@@ -175,10 +203,7 @@ int main()
 	srand(time(NULL));
 	nonogram n;
 	n.vulRandom();
-	n.drukAf();
 	n.NieuweBeschrijvingHor();
-	n.printBeschrijvingHor();
-	cout << endl;
 	n.nieuweBeschrijvingVer();
-	n.printBeschrijvingVer();
+	n.drukAf();
 }//main
