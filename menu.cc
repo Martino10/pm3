@@ -13,7 +13,7 @@ int cursor() //laat de cursor bewegen
 {
 	cout << "Dit laat de cursor bewegen" << endl;
 	return 0;
-}//random
+}//cursor
 
 int random() //vult het huidige beeld random in mbv gegeven percentage
 {
