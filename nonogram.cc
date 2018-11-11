@@ -1,4 +1,3 @@
-#include "pch.h"
 #include <iostream>
 #include <cstdlib> //random
 #include <ctime>
@@ -9,7 +8,7 @@ int leesGetal() {
 	int input = cin.get();
 	while (input != 10)
 	{
-		if (input > 47  && input < 58) {
+		if (input > 47 && input < 58) {
 			int inputGetal = input - '0';
 			if (vorigGetal == -1) {
 				vorigGetal = inputGetal;
@@ -60,17 +59,27 @@ public:
 
 	void drukAf() {
 		int i, n, k, m, horprintn, verprinti, verprintn;
-		for (m = 0; m < max +1; m++) {
+
+
+		for (m = 0; m < max + 1; m++) {
 			cout << "+++";
 		}
 		cout << "+" << endl;
 		for (i = 0; i < max; i++) {
 			cout << "+ ";
 			for (n = 0; n < max; n++) {
-				if (nono[i][n] == 1)
-					cout << " X ";
-				else
-					cout << "   ";
+				if (nono[i][n] == 1) {
+					if (i == cursory && n == cursorx)
+						cout << " * ";
+					else 
+						cout << " X ";
+				}
+				else {
+					if (i == cursory && n == cursorx)
+						cout << " - ";
+					else
+						cout << "   ";
+				}
 			}
 			cout << " + ";
 			for (horprintn = 0; horprintn < max; horprintn++) {
@@ -78,21 +87,21 @@ public:
 					cout << horBeschrijving[i][horprintn] << " ";
 				}
 			}
-			 cout << endl;
+			cout << endl;
 		}
-		for (k = 0; k < max +1; k++) {
+		for (k = 0; k < max + 1; k++) {
 			cout << "+++";
 		}
 		cout << "+" << endl;
 		for (verprintn = 0; verprintn < max; verprintn++) {
-			cout << "   ";
+			cout << "  ";
 			for (verprinti = 0; verprinti < max; verprinti++) {
-				
+
 				if (verBeschrijving[verprintn][verprinti] != 0) {
 					cout << " " << verBeschrijving[verprintn][verprinti] << " ";
 				}
 				else {
-					cout << "  ";
+					cout << "   ";
 				}
 			}
 			cout << endl;
@@ -101,7 +110,7 @@ public:
 
 	void NieuweBeschrijvingHor() {
 
-		int i, n, count=0;
+		int i, n, count = 0;
 		for (i = 0; i < max; i++) {
 			for (n = 0; n < max; n++) {
 				if (nono[i][n] == 1) {
@@ -120,13 +129,13 @@ public:
 
 			}
 			if (count > 0) {
-				horBeschrijving[i][n-1] = count;
+				horBeschrijving[i][n - 1] = count;
 				count = 0;
 			}
-		
+
 		}
 	}
-	
+
 	void printBeschrijvingHor() {
 		int i, n;
 		for (i = 0; i < max; i++) {
@@ -159,7 +168,7 @@ public:
 
 			}
 			if (count > 0) {
-				verBeschrijving[n-1][i] = count;
+				verBeschrijving[n - 1][i] = count;
 				count = 0;
 			}
 
@@ -177,10 +186,22 @@ public:
 			cout << endl;
 		}
 	}
-	
-	void printCursor() {
 
+	void cursorControl() {
+		int i, n;
+		cout << "Type w om de cursor naar boven te bewegen, s voor omlaag, a voor naar links en d voor naar rechts." << endl;
+			char beweeg = cin.get();
+		if (beweeg) {
+			switch (beweeg) {
+			case 'w': { cursory = cursory - 1; break; }
+			case 's': { cursory = cursory + 1; break; }
+			case 'a': { cursorx = cursorx - 1; break; }
+			case 'd': { cursorx = cursorx + 1; break; }
+			}
+		}
+		drukAf();
 	}
+
 	void beschrijvingReset() {
 		int i, n;
 		for (i = 0; i < max; i++) {
@@ -203,7 +224,7 @@ public:
 
 int main()
 {
-	
+
 	//random getallen
 	srand(time(NULL));
 	nonogram n;
@@ -211,4 +232,5 @@ int main()
 	n.NieuweBeschrijvingHor();
 	n.nieuweBeschrijvingVer();
 	n.drukAf();
+	n.cursorControl();
 }//main
