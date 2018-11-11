@@ -153,7 +153,7 @@ public:
 								vercount = n;
 							}
 						}
-					}		
+					}
 				}
 			}
 		}
@@ -299,26 +299,27 @@ int percentage()
 	cout << "Wijzigt het random percentage" << endl;
 	return 0;
 }//percentage
-/*
+
 int wijzigen()
 {
-	cout << "[G]rootte   [C]ursorkleur  [P]ercentage" << endl;
-	cin.get();
-	char submenuinput = cin.get();
-	if (submenuinput) {
+	bool again = true;
+	while (again) {
+		cout << "[G]rootte   [C]ursorkleur  [P]ercentage" << endl;
+		cin.get();
+		char submenuinput = cin.get();
+		if (submenuinput) {
 
-		switch (submenuinput) {
-		case 'G': { grootte(); break; }
-		case 'C': { cursorkleur(); break; }
-		case 'P': { percentage(); break; }
-		default: { return 0; }
-		}//switch
-	}//submenuinput
-	cout << "Druk op ENTER om terug te gaan naar het hoofdmenu";
-	cin.get(); //Als er op enter wordt gedrukt gaat hij terug naar het hoofdmenu
-	cin.get();
-	int hoofdmenu();
-	hoofdmenu();
+			switch (submenuinput) {
+			case 'G': { grootte(); break; }
+			case 'C': { cursorkleur(); break; }
+			case 'P': { percentage(); break; }
+			default: { return 0; }
+			}//switch
+		}//submenuinput
+		cout << "Druk op ENTER om terug te gaan naar het hoofdmenu";
+		cin.get(); //Als er op enter wordt gedrukt gaat hij terug naar het hoofdmenu
+		cin.get();
+	}
 	return 0;
 }//Submenu: wijzigen
 
@@ -330,34 +331,36 @@ int stoppen()
 
 //hoofdmenu
 
-int hoofdmenu(nonogram& n)
+int hoofdmenu(nonogram &n)
 {
-	cout << "S[C]hoon  C[U]rsor  [R]andom  [T]oggle  [N]ul  [I]nlezen  W[E]gschrijven  [W]ijzigen  [S]toppen [A]fdrukken" << endl;
-	char menuinput = cin.get();
-	if (menuinput) {
+	bool again = true;
+	while (again) {
+		cout << "S[C]hoon  C[U]rsor  [R]andom  [T]oggle  [N]ul  [I]nlezen  W[E]gschrijven  [W]ijzigen  [S]toppen [B]eschrijving [P]rinten" << endl;
+		char menuinput = cin.get();
 		switch (menuinput) {
-		case 'A': { n.drukAf(); break; }
 		case 'C': { n.leeg(); break; }
-				  //case 'U': { cursor(); break; }
+		case 'U': { cursor(); break; }
 		case 'R': { n.vulRandom(); break; }
-				  //case 'T': { toggle(); break; }
-		//case 'N': { n.beschrijvingReset(); break; }
-		case 'B': { n.verBeschrijving; n.horBeschrijving; break; }
-		case 'I': { n.test(); break; }
-		case 'E': { n.verandertest(); break; }
-				  //case 'W': { wijzigen(); break; }
-				  //case 'S': { stoppen(); break; }
-		default: { return 0; }
+		case 'T': { toggle(); break; }
+		case 'N': { n.beschrijvingReset(); break; }
+		case 'I': { inlezen(); break; }
+		case 'E': { wegschrijven(); break; }
+		case 'W': { wijzigen(); break; }
+		case 'B': { n.nieuweBeschrijving(); break; }
+		case 'P': {n.drukAf(); break; }
+		case 'S': {again = false; break; }
+		default: { break; }
 		}//switch
-	}//menuinput
-	cout << "Druk op ENTER om terug te gaan naar het hoofdmenu";
-	cin.get(); //Als er op enter wordt gedrukt gaat hij terug naar het hoofdmenu
-	cin.get();
-	int hoofdmenu();
-	hoofdmenu();
+		cout << "Druk op ENTER om terug te gaan naar het hoofdmenu";
+		cin.get(); //Als er op enter wordt gedrukt gaat hij terug naar het hoofdmenu
+		cin.get();
+	}
+
+	//int hoofdmenu();
+	//hoofdmenu();
 	return 0;
 }//hoofdmenu
-*/
+
 
 int main()
 {
@@ -365,8 +368,8 @@ int main()
 	//random getallen
 	srand(time(NULL));
 	nonogram n;
-	n.vulRandom();
+	n.leeg();
 	n.nieuweBeschrijving();
-	n.drukAf();
+	hoofdmenu(n);
 	//hoofdmenu(n);
 }//main
