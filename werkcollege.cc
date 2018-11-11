@@ -104,6 +104,13 @@ public:
 		}
 	}//drukAf
 
+	void test() {
+		cout << hoi;
+	}
+
+	void verandertest(){
+		hoi = 10;
+	}
 	//berekent de horizontale beschrijving
 	void NieuweBeschrijvingHor() {
 
@@ -192,6 +199,7 @@ public:
 	int verBeschrijving[max][max];
 	//het nonogram zelf
 	bool nono[max][max];
+	int hoi = 5;
 
 
 };
@@ -281,22 +289,21 @@ int stoppen()
 }//stoppen
 
 //hoofdmenu
-int hoofdmenu()
+int hoofdmenu(nonogram& n)
 {
 	cout << "S[C]hoon  C[U]rsor  [R]andom  [T]oggle  [N]ul  [I]nlezen  W[E]gschrijven  [W]ijzigen  [S]toppen [A]fdrukken" << endl;
 	char menuinput = cin.get();
 	if (menuinput) {
-		nonogram n;
 		switch (menuinput) {
 		case 'A': { n.drukAf(); break; }
 		case 'C': { n.leeg(); break; }
 				  //case 'U': { cursor(); break; }
 		case 'R': { n.vulRandom(); break; }
 				  //case 'T': { toggle(); break; }
-		case 'N': { n.beschrijvingReset(); break; }
+		//case 'N': { n.beschrijvingReset(); break; }
 		case 'B': { n.verBeschrijving; n.horBeschrijving; break; }
-				  //case 'I': { inlezen(); break; }
-				  //case 'E': { wegschrijven(); break; }
+		case 'I': { n.test(); break; }
+		case 'E': { n.verandertest(); break; }
 				  //case 'W': { wijzigen(); break; }
 				  //case 'S': { stoppen(); break; }
 		default: { return 0; }
@@ -320,5 +327,5 @@ int main()
 	n.leeg();
 	n.NieuweBeschrijvingHor();
 	n.nieuweBeschrijvingVer();
-	hoofdmenu();
+	hoofdmenu(n);
 }//main
