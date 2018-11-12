@@ -49,10 +49,14 @@ public:
 			}
 		}
 	}//vulRandom
-
+	
 	void wgrootte() {
-
+		cout << "Wat wordt de nieuwe grootte van het nonogram?" << endl;
+		static const int max = leesGetal();
+		beschrijvingReset();
+		leeg();
 	}
+
 
 	void wpercentage() {
 		cin.get();
