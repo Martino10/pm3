@@ -52,7 +52,12 @@ public:
 	}//vulRandom
 
 	void wgrootte() {
-
+		cin.get();
+		cout << "Wat wordt de nieuwe grootte van het nonogram?" << endl;
+		int leesGetal()=cin.get();
+		cout << "Grootte gewijzigd naar " << max << endl;
+		beschrijvingReset();
+		leeg();
 	}
 
 	void wpercentage() {
@@ -329,8 +334,8 @@ public:
 	}//drukAf
 	
 	void aanpasCursor(){
-		if (cursorpastaan){
-			if(cursordoet){
+		if (cursorpastaan = true){
+			if(cursordoet = true){
 			nono[cursory][cursorx] = 1;
 			}
 			else{
@@ -344,9 +349,9 @@ public:
 		while (again)
 		{
 			cout << "[g]een spoor, [z]wart spoor, [w]itspoor, w[e]l spoor, [q]terug" << endl;
-			char beweeg = cin.get();
-			if (beweeg) {
-				switch (beweeg) {
+			char spoor = cin.get();
+			if (spoor) {
+				switch (spoor) {
 				case 'g':
 					cursorpastaan = false;
 				case 'z':
