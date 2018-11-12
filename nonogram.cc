@@ -8,6 +8,7 @@
 #include <iostream>
 #include <cstdlib> //random
 #include <ctime>
+#include <fstream>
 using namespace std;
 
 //als er input gevraagd wordt van de gebruiker wordt het hiermee
@@ -49,14 +50,10 @@ public:
 			}
 		}
 	}//vulRandom
-	
-	void wgrootte() {
-		cout << "Wat wordt de nieuwe grootte van het nonogram?" << endl;
-		static const int max = leesGetal();
-		beschrijvingReset();
-		leeg();
-	}
 
+	void wgrootte() {
+
+	}
 
 	void wpercentage() {
 		cin.get();
@@ -485,6 +482,65 @@ public:
 			cout << endl;
 		}
 	}//drukAf
+	
+	void schrijfnaarfile(){
+   	ofstream uitvoer("file.txt");
+   	uitvoer << max << " " << max << endl;
+   	int i, n;
+		for (i = 0; i < max; i++) {
+			for (n = 0; n < max; n++) {
+				//als er een 0 staat niet printen
+				if (horBeschrijving[i][n] != 0) {
+					uitvoer << horBeschrijving[i][n] << " ";
+				}
+			}	
+		uitvoer << "0" << endl;
+		}
+		for (i = 0; i < max; i++) {
+			for (n = 0; n < max; n++) {
+				//als er een 0 staat niet printen
+				if (verBeschrijving[n][i] != 0) {
+					uitvoer << verBeschrijving[n][i] << " ";
+				}
+			}
+				uitvoer << "0" << endl;	
+		}
+   	uitvoer.close();
+	}//schrijfnaarfile
+	
+	void inlezenvanfile(){
+		ifstream invoer("file.txt");
+		int getal, i, n;
+		invoer >> getal;
+		int rij = getal;
+		invoer >> getal;
+		int kolom = getal;
+		i=0;
+		for (n = 0; n < kolom; n++) {
+			invoer >> getal;
+			horBeschrijving[i][n] = getal;
+			if (!getal){
+				if (i < max){
+					i++;
+					n = 0;
+				}		
+			}
+		}
+		i = 0;
+		n = 0;
+		for (n = 0; n < rij; n++) {
+			invoer >> getal;
+			verBeschrijving[n][i] = getal;
+			if (!getal){
+				if (i < max){
+					i++;
+					n = 0;
+				}		
+			}
+		}
+		aanpassenVer();
+		invoer.close();
+		}
 
 	//coordinaten van de cursor aan het begin
 	int cursorx = max / 2 + 1, cursory = max / 2 + 1;
@@ -559,8 +615,8 @@ int hoofdmenu(nonogram &n)
 		case 'u': n.cursorControl(); break;
 		case 'r': n.vulRandom(); break;
 		case 'n': n.beschrijvingReset(); break;
-		case 'i': inlezen(); break;
-		case 'e': wegschrijven(); break;
+		case 'i': n.inlezenvanfile(); break;
+		case 'e': n.schrijfnaarfile(); break;
 		case 'w': wijzigen(n); break;
 		case 'b': n.nieuweBeschrijving(); break;
 		case 'p': n.drukAf(); break;
