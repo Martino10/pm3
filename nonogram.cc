@@ -1,3 +1,10 @@
+//Opdracht 3 Programmeer methoden. Martin Krikke en Julian Poelsma (s2270935 en s2225387)
+//Dit programma kan een nonogram genereren. Bij deze nonogram kan het de beschrijving geven.
+//Met behulp van deze beschrijving en het programma kan de gebruiker deze nonogram oplossen.
+//Dit programma is gecodeerd met Microsoft Visual Studio. We hebben dus de standaard 
+//Visual Studio compiler gebruikt, het werkt echter ook met de g++ compiler (versie 5.4.0).
+//Gebruik bij de g++ compiler  $ g++ -Wall -o nonogram nonogram.cc -std=c++11 om te compilen.
+
 #include <iostream>
 #include <cstdlib> //random
 #include <ctime>
@@ -48,11 +55,10 @@ public:
 	}
 
 	void wpercentage() {
-		cout << "Wat wordt de nieuwe random-percentage?" << endl;
 		cin.get();
-		int randperc = cin.get();
-		//int leesgetal();
-		//randperc = leesGetal();
+		cout << "Wat wordt de nieuwe random-percentage?" << endl;
+		int leesgetal();
+		randperc = leesGetal();
 		cout << "random-percentage gewijzigd naar " << randperc << "%" << endl;
 	}
 
@@ -320,43 +326,78 @@ public:
 			cout << endl;
 		}
 	}//drukAf
-
-	void cursorControl() {
-		int i, n;
+	
+	void aanpasCursor(){
+		if (cursorpastaan){
+			if(cursordoet){
+			nono[cursory][cursorx] = 1;
+			}
+			else{
+			nono[cursory][cursorx] = 0;
+			}
+		}
+	}
+	
+	void wcursor(){
 		bool again = true;
 		while (again)
 		{
-			cout << "[w]boven, [s]beneden, [a]links, [d]rechts, [t]oggle, [q]hoofdmenu" << endl;
+			cout << "[g]een spoor, [z]wart spoor, [w]itspoor, w[e]l spoor, [q]terug" << endl;
 			char beweeg = cin.get();
 			if (beweeg) {
 				switch (beweeg) {
-				case 'w': {
+				case 'g':
+					cursorpastaan = false;
+				case 'z':
+					cursordoet = true;
+				case 'w':
+					cursordoet = false;
+				case 'e':
+					cursorpastaan = true;
+				case 'q': again = false;				
+				default: break;
+				}
+			}
+	}
+	}
+
+	void cursorControl() {
+		bool again = true;
+		while (again)
+		{
+			cout << "[w]boven, [s]beneden, [a]links, [d]rechts, "
+			<<	"[t]oggle, [q]hoofdmenu" << endl;
+			char beweeg = cin.get();
+			if (beweeg) {
+				switch (beweeg) {
+				case 'w':
 					if (cursory > 0) {
 						cursory = cursory - 1;
-					} break; }
-				case 's': {
+					} aanpasCursor(); break;
+				case 's':
 					if (cursory < max - 1) {
 						cursory = cursory + 1;
-					} break; }
-				case 'a': {
+					} aanpasCursor(); break;
+				case 'a':
 					if (cursorx > 0) {
 						cursorx = cursorx - 1;
-					} break; }
-				case 'd': {
+					}  aanpasCursor();break;
+				case 'd':
 					if (cursorx < max - 1) {
 						cursorx = cursorx + 1;
-					} break; }
-				case 't': {
+					}  aanpasCursor();break;
+				case 't':
 					if (nono[cursory][cursorx] == 0) {
 						nono[cursory][cursorx] = 1;
 					}
 					else {
 						nono[cursory][cursorx] = 0;
-					}break; }
-				case 'q': { again = false; }
+					}break;
+				case 'q': again = false;				
+				default: cursorPrint(); break;
 				}
 			}
-			cursorPrint();
+			
 		}
 
 	}
@@ -442,7 +483,7 @@ public:
 	}//drukAf
 
 	//coordinaten van de cursor aan het begin
-	int cursorx = (max / 2) + 1, cursory = (max / 2) + 1;
+	int cursorx = max / 2 + 1, cursory = max / 2 + 1;
 	//het randompercentage
 	int randperc = 50;
 	//de grote van de nonogram
@@ -457,8 +498,8 @@ public:
 	int vercount;
 	//het nonogram zelf
 	bool nono[max][max];
-	int hoi = 5;
-
+	bool cursorpastaan = true;
+	bool cursordoet = false;
 
 };
 
@@ -478,16 +519,16 @@ int wijzigen(nonogram &n)
 {
 	bool again = true;
 	while (again) {
-		cout << "[g]rootte, [p]ercentage, [q]terug" << endl;
-		cin.get();
+		cout << "[g]rootte, [p]ercentage, [c]ursor, [q]terug" << endl;
 		char submenuinput = cin.get();
 		if (submenuinput) {
 
 			switch (submenuinput) {
-			case 'g': { n.wgrootte(); break; }
-			case 'p': { n.wpercentage(); break; }
-			case 'q': { return 0; break; }
-			default: { break; }
+			case 'g': n.wgrootte(); break; 
+			case 'p': n.wpercentage(); break;
+			case 'c': n.wcursor(); break;
+			case 'q': return 0; break;
+			default: break;
 			}//switch
 		}//submenuinput
 	}
@@ -506,20 +547,21 @@ int hoofdmenu(nonogram &n)
 {
 	bool again = true;
 	while (again) {
-		cout << "s[c]hoon, c[u]rsor, [r]andom, [n]ul, [i]nlezen, w[e]gschrijven, [w]ijzigen, [q]stoppen, [b]eschrijving, [p]rinten" << endl;
+		cout << "s[c]hoon, c[u]rsor, [r]andom, [n]ul, [i]nlezen, w[e]gschrijven,"
+			<<" [w]ijzigen, [q]stoppen, [b]eschrijving, [p]rinten" << endl;
 		char menuinput = cin.get();
 		switch (menuinput) {
-		case 'c': { n.leeg(); break; }
-		case 'u': { n.cursorControl(); break; }
-		case 'r': { n.vulRandom(); break; }
-		case 'n': { n.beschrijvingReset(); break; }
-		case 'i': { inlezen(); break; }
-		case 'e': { wegschrijven(); break; }
-		case 'w': { wijzigen(n); break; }
-		case 'b': { n.nieuweBeschrijving(); break; }
-		case 'p': { n.drukAf(); break; }
-		case 'q': {again = false; break; }
-		default: { break; }
+		case 'c': n.leeg(); break;
+		case 'u': n.cursorControl(); break;
+		case 'r': n.vulRandom(); break;
+		case 'n': n.beschrijvingReset(); break;
+		case 'i': inlezen(); break;
+		case 'e': wegschrijven(); break;
+		case 'w': wijzigen(n); break;
+		case 'b': n.nieuweBeschrijving(); break;
+		case 'p': n.drukAf(); break;
+		case 'q': again = false; break;
+		default: break;
 		}//switch
 		cin.get(); //Als er op enter wordt gedrukt gaat hij terug naar het hoofdmenu
 	}
@@ -532,7 +574,18 @@ int hoofdmenu(nonogram &n)
 
 int main()
 {
-
+	//infoblokje
+	cout <<
+		"************************************************************" << endl <<
+		"* Dit programma is geschreven door:                        *" << endl <<
+		"* Julian Poelsma, s2225387                                 *" << endl <<
+		"* Martin Krikke, s2270935                                  *" << endl <<
+		"* Wij zijn in 2018 gestart aan de studie Informatica       *" << endl <<
+		"* Datum: 12/11/2018                                        *" << endl <<
+		"*                                                          *" << endl <<
+		"* In dit programma kan een nonogram opgelost worden.       *" << endl <<
+		"************************************************************" << endl << endl;
+		
 	//random getallen
 	srand(time(NULL));
 	nonogram n;
